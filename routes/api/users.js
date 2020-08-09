@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const gravatar = require('gravatar')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const config = require('config')
 const { check, validationResult } = require('express-validator')
 
 // import the User model
@@ -47,14 +49,32 @@ router.post('/', [
                 password
             })
 
-            // encrypt the password using bcrypt 
+            // encrypt the password using bcrypt + save the user
             const salt = await bcrypt.genSalt(10)
             user.password = await bcrypt.hash(password, salt)
-
             await user.save()
 
             // return the JSON Web Token - in order to log the user in right away, we need their web token
-            res.send('user registered')
+            const payload = {
+                user: {
+                    id: user.id
+                }
+            }
+
+            // sign the token, pass in payload, pass in secret + expiration
+            // inside callback we'll get an error or token - if we get token we send it back to client
+
+            jwt.sign(
+                payload,
+                config.get('jwtSecret'),
+                { expiresIn: 3600000 },
+                (err, token) => {
+                    if (err) throw err
+                    res.json({ token })
+                }
+            )
+
+            res.send('user created successfully')
 
         } catch (err) {
             console.log(err.message)
