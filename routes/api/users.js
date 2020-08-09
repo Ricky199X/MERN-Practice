@@ -63,7 +63,6 @@ router.post('/', [
 
             // sign the token, pass in payload, pass in secret + expiration
             // inside callback we'll get an error or token - if we get token we send it back to client
-
             jwt.sign(
                 payload,
                 config.get('jwtSecret'),
@@ -75,7 +74,6 @@ router.post('/', [
             )
 
             res.send('user created successfully')
-
         } catch (err) {
             console.log(err.message)
             res.status(500).send('server error')
