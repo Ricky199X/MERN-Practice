@@ -1,4 +1,3 @@
-// File contains all default values accessed globally thru app
 {
     "mongoURI": "mongodb+srv://ricky19:Nelson19!@devconnector.a3vcs.mongodb.net/<dbname>?retryWrites=true&w=majority"
 }
