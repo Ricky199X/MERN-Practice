@@ -179,7 +179,8 @@ router.put('/experience', [
         return res.status(400).json({ errors: errors.array() })
     }
 
-    const { title,
+    const {
+        title,
         company,
         location,
         from,
@@ -189,6 +190,7 @@ router.put('/experience', [
     } = req.body
 
     const newExp = {
+        title,
         company,
         location,
         from,
