@@ -7,11 +7,10 @@ const { check, validationResult } = require('express-validator')
 
 // Route: GET api/profiles -> route to get all profiles 
 // Public 
-
-router.get('/profiles', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
-        const profiles = await Profile.find({ profiles: req.profiles })
-        console.log(profiles)
+        const profiles = await Profile.find().populate('user', ['name', 'avatar'])
+
         if (!profiles) {
             return res.status(400).json({ msg: `Cannot find profiles!` })
         }
