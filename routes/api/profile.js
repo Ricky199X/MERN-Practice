@@ -5,6 +5,24 @@ const Profile = require('../../models/Profile')
 const User = require('../../models/User')
 const { check, validationResult } = require('express-validator')
 
+// Route: GET api/profiles -> route to get all profiles 
+// Public 
+
+router.get('/profiles', async (req, res) => {
+    try {
+        const profiles = await Profile.find({ profiles: req.profiles })
+        console.log(profiles)
+        if (!profiles) {
+            return res.status(400).json({ msg: `Cannot find profiles!` })
+        }
+
+        res.json(profiles)
+    } catch (err) {
+        console.error(err.message)
+        res.status(500).send(`Server Err`)
+    }
+})
+
 // Route: GET api/profile/me -> route to get current user's profile - user ID need to be in the token
 // Private
 router.get('/me', auth, async (req, res) => {
