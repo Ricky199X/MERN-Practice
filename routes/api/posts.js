@@ -7,11 +7,11 @@ const Post = require('../../models/Post')
 const Profile = require('../../models/Profile')
 const User = require('../../models/User')
 
-// Route: api/posts -> test route to get all posts
-// Public
+// Route: GET api/posts -> test route to get all posts
+// Private
 router.get('/', async (req, res) => {
     try {
-        const posts = await Post.find()
+        const posts = await Post.find().sort({ date: -1 })
 
         if (!posts) {
             return res.status(400).json({ msg: `Cannot find posts!` })
@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
     }
 })
 
-// Route: api/posts -> route to add a post
+// Route: POST api/posts -> route to add a post
 // Private
 
 router.post('/', [auth, [
@@ -57,5 +57,27 @@ router.post('/', [auth, [
 
 })
 
+// Route: GET api/posts/:id -> route to get post by id
+// Private
+router.get('/:id', async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id)
+
+        if (!post) {
+            return res.status(404).json({ msg: `Post not found!` })
+        }
+
+        res.json(post)
+
+    } catch (err) {
+        console.error(err.message)
+
+        if (err.kind === 'ObjectId') {
+            return res.status(404).json({ msg: `Post not found!` })
+        }
+
+        res.status(500).send(`Server Error`)
+    }
+})
 
 module.exports = router 
