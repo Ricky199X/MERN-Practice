@@ -1,10 +1,15 @@
-import React from 'react';
-
+import React, { Fragment } from 'react';
 import './App.css';
+
+import Navbar from './components/layout/navbar'
+import Landing from './components/layout/landing'
 
 const App = () => {
   return (
-    <h1>Ricky</h1>
+    <Fragment>
+      <Navbar />
+      <Landing />
+    </Fragment>
   )
 }
 
