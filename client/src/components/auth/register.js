@@ -1,5 +1,6 @@
 // Since Register is a functional companent, we want to use useState hook 
 import React, { Fragment, useState } from 'react'
+import axios from 'axios'
 
 const Register = () => {
     // formData is the state, setFormData is function used to update state
@@ -15,13 +16,31 @@ const Register = () => {
     const onChange = (event) => setFormData({ ...formData, [event.target.name]: event.target.value })
 
     // onSubmit -> handles submission of the form 
-    const onSubmit = (event) => {
+    const onSubmit = async event => {
         event.preventDefault()
 
         if (password !== password2) {
             console.log(`Passwords do not match`)
         } else {
-            console.log(formData)
+            const newUser = {
+                name,
+                email,
+                password
+            }
+
+            try {
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+
+                const body = JSON.stringify(newUser)
+                const res = await axios.post('/api/users', body, config)
+                console.log(res.data)
+            } catch (err) {
+                console.error(err.response.data)
+            }
         }
     }
 
