@@ -1,8 +1,13 @@
 // Since Register is a functional companent, we want to use useState hook 
 import React, { Fragment, useState } from 'react'
 import { Link } from 'react-router-dom';
+import { setAlert } from '../../actions/alert'
+import PropTypes from 'prop-types'
 
-const Register = () => {
+// connect component to Redux 
+import { connect } from 'react-redux'
+
+const Register = ({ setAlert }) => {
     // formData is the state, setFormData is function used to update state
     const [formData, setFormData] = useState({
         name: '',
@@ -20,7 +25,7 @@ const Register = () => {
         event.preventDefault()
 
         if (password !== password2) {
-            console.log(`Passwords do not match`)
+            setAlert(`Passwords do not match`, 'danger')
         } else {
             console.log(`new user created!`)
         }
@@ -84,5 +89,8 @@ const Register = () => {
     )
 }
 
+Register.propTypes = {
+    setAlert: PropTypes.func.isRequired
+}
 
-export default Register
+export default connect(null, { setAlert })(Register)
